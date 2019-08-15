@@ -1,7 +1,7 @@
 
 import urllib.request as url_request
-import urllib2 as url_retrieve
-
+import requests
+from uploadscript import readPDF
 
 def readURL():
     url = "http://archive.moia.gov.il/Publications/talmid_he.pdf"
@@ -44,6 +44,8 @@ def is_downloadable(url):
 
 
 if __name__ == '__main__':
-    path = 'C:\\2.pdf'
-    #readPDF(path)
-    readURL()
+    url = "https://meyda.education.gov.il/files/Tarbut/zehut_olim-hadashim.pdf"
+    link = "http://www.somesite.com/details.pl?urn=2344"
+    f = requests.get(url)
+    print(f.text)
+    #readPDF(myfile)
