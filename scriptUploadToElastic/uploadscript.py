@@ -41,7 +41,7 @@ def create_json(filename, paragraph, url, timestamp):
 
 
 if __name__ == '__main__':
-    path = 'C:\\2.pdf'
+    path = '2.pdf'
 #    es = Elasticsearch()
     json_list = readPDF(path)
     print(json_list)
