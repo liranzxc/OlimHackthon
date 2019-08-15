@@ -6,14 +6,15 @@ app = Flask(__name__)
 
 
 def SearchElastic(desc):
-    body = {}
-    res = es.search(index="olim", doc_type="doc", body={
-    "query": {
-        "multi_match": {
-            "query": desc,
-            "fields": ["subject", "message"]
-        }
-    })
+    pass
+    # body = {}
+    # res = es.search(index="olim", doc_type="doc", body={
+    # "query": {
+    #     "multi_match": {
+    #         "query": desc,
+    #         "fields": ["subject", "message"]
+    #     }
+    # })
 
 @app.route("/", methods=['POST'])
 def SearchResults():
