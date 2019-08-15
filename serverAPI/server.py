@@ -6,21 +6,27 @@ app = Flask(__name__)
 
 
 def SearchElastic(desc):
-    pass
-    # body = {}
-    # res = es.search(index="olim", doc_type="doc", body={
-    # "query": {
-    #     "multi_match": {
-    #         "query": desc,
-    #         "fields": ["subject", "message"]
-    #     }
-    # })
+    desc = desc[::-1]
+    body = {"query": {
+        "multi_match": {
+            "query": desc,
+            "fuzziness": "auto"
+        }
+    }}
+    res = es.search(index="olim", body=body)
+    total = res["hits"]["total"]["value"]
+    if total > 0:
+        return jsonify(res["hits"]["hits"][0]["_source"])
+    else:
+        return {}
 
 @app.route("/", methods=['POST'])
 def SearchResults():
     if request.method == 'POST':
-        es.index(index="my-index", doc_type='test', id=42, body={"any": "data", "timestamp": datetime.now()})
-        return jsonify(request.json)
+        data = request.json
+        results = SearchElastic(data["desc"])
+        return results
+
 
 if __name__ == "__main__":
     es = Elasticsearch()
