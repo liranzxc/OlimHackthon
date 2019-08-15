@@ -1,14 +1,14 @@
 
-import urllib.request as url_request
+#import urllib.request as url_request
 import requests
-from uploadscript import readPDF
+from uploadscript import read_pdf
 
 def readURL():
     url = "http://archive.moia.gov.il/Publications/talmid_he.pdf"
 
     file_name = url.split('/')[-1]
-    u = url_request.urlopen(url)
-    f = open(file_name, 'wb')
+   # u = url_request.urlopen(url)
+   # f = open(file_name, 'wb')
     meta = u.info()
     file_size = int(meta.getheaders("Content-Length")[0])
     print("Downloading: %s Bytes: %s" % (file_name, file_size))
