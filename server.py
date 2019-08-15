@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify
 from datetime import datetime
 from elasticsearch import Elasticsearch
-
+from TranslateAPI import Translation
 app = Flask(__name__)
 
 
@@ -16,16 +16,30 @@ def SearchElastic(desc):
     res = es.search(index="olim", body=body)
     total = res["hits"]["total"]["value"]
     if total > 0:
-        return jsonify(res["hits"]["hits"][0]["_source"])
+        return res["hits"]["hits"][0]["_source"]
     else:
         return {}
+
 
 @app.route("/", methods=['POST'])
 def SearchResults():
     if request.method == 'POST':
         data = request.json
-        results = SearchElastic(data["desc"])
-        return results
+        desc = data["desc"]
+        target = data["len"]
+
+        lendic = Translation.lenguages().values()
+        if target not in lendic:
+            return {"err": "len not supported yet !"}
+
+        hebrew = Translation.translate_to_hebrew(desc)
+        results = SearchElastic(hebrew)
+        if results is not {}:
+            neg = Translation.translate_from_hebrew_to_target(results["Paragraph"], target)
+            print("neg :" + str(neg))
+            return jsonify({"data" : neg})
+        else:
+            return jsonify({"data": {}})
 
 
 if __name__ == "__main__":

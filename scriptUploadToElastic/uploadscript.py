@@ -26,7 +26,6 @@ def read_pdf(filename):
 
 
 def indexer(item, _index, _type):
-    print(item)
     item["_type"] = _type
     item["_index"] = _index
     return item
@@ -53,15 +52,14 @@ def create_json(filename, paragraph, url, timestamp):
 
 if __name__ == '__main__':
     json_list = []
-    for i in range(1, 9):
+    for i in range(1, 10):
         print("reading file num " + str(i))
         path = 'examples/' + str(i) + '.pdf'
-        json_list.append(read_pdf(path))
+        json_list.extend(read_pdf(path))
 
-    print(json_list)
-    #es = Elasticsearch()
-    #es.indices.create(index=index, ignore=400)
+    es = Elasticsearch()
+    es.indices.create(index=index, ignore=400)
     print("ok")
     json_list = list(map(lambda item: indexer(item, index, search_type), json_list))
-    #res2 = helpers.bulk(es, json_list, chunk_size=500, request_timeout=200)
-    #print(res2)
+    res2 = helpers.bulk(es, json_list, chunk_size=500, request_timeout=200)
+    print(res2)
