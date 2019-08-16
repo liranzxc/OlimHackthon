@@ -74,7 +74,7 @@ def upload_url_to_elastic(url, title="html"):
     if is_webpage(url):
         list = url_to_text(url)
         for p in list:
-            json_list.append(text_to_json(p, url, title, False))
+            json_list.extend(text_to_json(p, url, title,False))
         upload_json_to_elastic(json_list)
     #print(json_list)
 

@@ -5,7 +5,7 @@ from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 import uuid
 import re
-
+import os
 index = 'olim'
 search_type = 'doc'
 min_paragraph_length = 40
@@ -15,7 +15,7 @@ def read_pdf(filename, url="pdf"):
     with open(filename, 'rb') as f:
         extracted_text = slate.PDF(f)
     text = extracted_text.text(False)
-    return text_to_json(text, url, filename)
+    return text_to_json(text, url, filename,reverse_text=False)
 
 
 def text_to_json(text, src_string, filename, reverse_text=True):
@@ -63,8 +63,8 @@ def upload_json_to_elastic(json_list):
 
 if __name__ == '__main__':
     json_list = []
-    for i in range(1, 10):
-        path = 'examples/' + str(i) + '.pdf'
-        print("reading file num " + path)
-        json_list.extend(read_pdf(path))
-    upload_json_to_elastic(json_list)
+    for (root, dirs, files) in os.walk('examples/', topdown=True):
+        for f in files:
+            print("reading file num " + os.path.join(root,f))
+            json_list.extend(read_pdf(os.path.join(root,f)))
+        upload_json_to_elastic(json_list)
