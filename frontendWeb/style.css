@@ -70,7 +70,7 @@ html, body
 body
 {
     margin: 0;
-    background-color: #ffd8d8;
+    background-color: #ffffff;
 }
 
 .tb
@@ -101,7 +101,24 @@ input, button
     top: 50%;
     left: 0;
     right: 0;
-    width: 550px;
+    width: 1000px;
+    padding: 35px;
+    margin: -83px auto 0 auto;
+    background-color:#424f95;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px #424f95, 0 0 0 20px #ffffffeb;
+    transform: scale(0.6);
+}
+
+
+
+#cover2
+{
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 1000px;
     padding: 35px;
     margin: -83px auto 0 auto;
     background-color:#424f95;
