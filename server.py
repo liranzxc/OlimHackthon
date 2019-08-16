@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify,render_template
 from datetime import datetime
 from elasticsearch import Elasticsearch
 from TranslateAPI import Translation
@@ -27,12 +27,18 @@ def flip(item):
     else:
         return {"text" : item["_source"]["Paragraph"] ,'url':item["_source"]["URL"] }
 
-def trasHeb(item,target):
-    item["text"] =  Translation.translate_from_hebrew_to_target(item["text"], target)
+
+def transHeb(item,target):
+    item["text"] = Translation.translate_from_hebrew_to_target(item["text"], target)
     return item
 
 
-@app.route("/", methods=['POST'])
+@app.route("/")
+def home():
+    return render_template('index.html')
+
+
+@app.route("/new", methods=['POST'])
 def SearchResults():
     if request.method == 'POST':
         data = request.json
@@ -47,14 +53,14 @@ def SearchResults():
         hebrew = Translation.translate_to_hebrew(desc)
         results = SearchElastic(hebrew)
 
-        results = list(map(flip,results ))
+        results = list(map(flip, results))
 
         finalResult = []
         for r in results:
-            finalResult.append(trasHeb(r,target))
+            finalResult.append(transHeb(r, target))
 
         if len(finalResult) > 0:
-            return jsonify({"data" : finalResult})
+            return jsonify({"data": finalResult})
         else:
             return jsonify({"data": {}})
 

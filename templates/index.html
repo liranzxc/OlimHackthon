@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
 <body>
 
@@ -69,10 +69,10 @@
         </div>
         <!-- Mask & flexbox options-->
 
-        <form id="myform" method="post" action="http://localhost:5000">
+        <form id="myform" method="post" action="/new">
             <div id="cover">
                 <div class="tb">
-                    <div class="td"><input type="text" placeholder="Search" required></div>
+                    <div class="td"><input type="text" name="desc"  id="desc" placeholder="Search" required></div>
                     <div class="td" id="s-cover">
                         <button type="submit">
                             <div id="s-circle"></div>
@@ -86,7 +86,7 @@
 
 
                                     <!-- Large button groups (default and split) -->
-               <select class="form-control" id="exampleFormControlSelect1" style="font-size: 48px">
+               <select class="form-control" name="len" id="len" style="font-size: 48px">
                     <option>he</option>
                     <option>es</option>
                     <option>en</option>
@@ -113,6 +113,16 @@
 <main>
     <div class="container">
 
+        <div id="list">
+
+            <ul id="ul" style="display: inline-grid;  grid-template-columns: auto auto auto;">
+
+
+
+            </ul>
+
+
+        </div>
         <!--Grid row-->
         <div class="row py-5">
             <!--Grid column-->
@@ -133,23 +143,49 @@
     e.preventDefault(); // avoid to execute the actual submit of the form.
 
 
-    console.log("here");
+      $('#ul').empty();
 
-    var form = $(this);
-    var url = form.attr('action');
+
+    const desc = document.getElementById("desc");
+    const len = document.getElementById("len");
+
+      console.log(desc.value);
+      console.log(len.value);
+
+
 
     $.ajax({
            type: "POST",
-           url: url,
-           data: form.serialize(), // serializes the form's elements.
+           url: "/new",
+           dataType: 'json',
+           type: 'post',
+           contentType: 'application/json',
+           data: JSON.stringify({"desc" : desc.value ,"len": len.value}), // serializes the form's elements.
            success: function(data)
            {
-               alert(data); // show response from the php script.
+               data.data.forEach(renderProductList)
+
            }
          });
 
 
 });
+
+   function renderProductList(element, index, arr) {
+
+const card = `<div class="card bg-light mb-3" style="max-width: 18rem;">
+<div class="card-header">Result number `+index+`</div>
+    <div class="card-body">
+        <p class="card-text">`+element.text+`</p>
+        <p class="card-title"><a href=\`+element.url+\`>Link to source</a></p>
+
+    </div>
+</div>`;
+
+
+            $("#ul").append(card);
+
+        }
 
 </script>
 

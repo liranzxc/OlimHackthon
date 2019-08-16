@@ -11,7 +11,7 @@ search_type = 'doc'
 min_paragraph_length = 40
 
 
-def read_pdf(filename, url="pdf"):
+def read_pdf(filename, url="#"):
     with open(filename, 'rb') as f:
         extracted_text = slate.PDF(f)
     text = extracted_text.text(False)
